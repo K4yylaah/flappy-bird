@@ -1,31 +1,50 @@
-import pygame  
+import pygame
 
 import assets
-import configs 
-from objects.background import Background 
-pygame.init() 
+import configs
+from objects.background import Background
 
+#Initialisation de Pygame
+pygame.init()
+
+#Création de la fenêtre
 screen = pygame.display.set_mode((configs.SCREEN_WIDTH, configs.SCREEN_HEIGHT))
-clock = pygame.time.Clock()
-running = True 
+pygame.display.set_caption("Flappy Bird")
 
+#Configuration de l'horloge
+clock = pygame.time.Clock()
+running = True
+
+#Chargement des sprites
 assets.load_sprites()
 
-sprites = pygame.sprite.LayeredUpdates() 
+try:
+    # Récupération du sprite de fond
+    background = assets.get_sprite("background")
+except KeyError as e:
+    print(f"Erreur : {e}")
+    pygame.quit()
+    exit()
 
+#Création d'un groupe de sprites
+sprites = pygame.sprite.LayeredUpdates()
 
+#ajout du background au groupe de sprites
 Background(sprites)
 
-while running: 
-    for event in pygame.event.get(): 
-        if event.type == pygame.QUIT: 
-            running = False 
+# Boucle principale du jeu
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
 
-    screen.fil("pink") 
-    
-    sprites.draw(screen) 
+    # Remplissage de l'écran avec une couleur de fond
+    screen.fill("pink")  
 
-    pygame.display.flip() 
-    clock.tick(configs.FPS)
-    
-pygame.quit()
+    # Dessin des sprites
+    sprites.draw(screen)
+
+    # Mise à jour de l'affichage
+    pygame.display.flip()
+
+    # Contrôle de la fréquence d'images
